@@ -23,19 +23,15 @@ import {
   TRAY_ICON_UPDATE,
   SET_COMPACT_MODE,
   SET_OPEN_AT_LOGIN,
-  SET_ENABLE_RPC,
 } from "@pomatez/shareables";
 import {
   activateGlobalShortcuts,
-  activateAutoUpdate,
   blockShortcutKeys,
   getIcon,
   isWindow,
   isMacOS,
   getFromStorage,
   createContextMenu,
-  initializeRPC,
-  uninitializeRPC,
 } from "./helpers";
 import isDev from "electron-is-dev";
 import store from "./store";
@@ -287,33 +283,10 @@ if (!onlySingleInstance) {
   });
 
   app.whenReady().then(async () => {
-    if (isDev) {
-      console.log("Installing devtools");
-      const extensions = ["REACT_DEVELOPER_TOOLS", "REDUX_DEVTOOLS"];
-      const installer = await import("electron-devtools-installer");
-      console.log(installer);
-
-      for (const tool of extensions) {
-        try {
-          //@ts-expect-error
-          await installer.default(installer[tool], true);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    }
+    // NOTE: Intentionally not auto-installing Electron devtools extensions, as that can
+    // trigger outbound network calls during development.
 
     createMainWindow();
-    try {
-      if (win) {
-        const data = await getFromStorage(win, "state");
-        if (data.settings.enableRPC) {
-          initializeRPC();
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
 
     if (onProduction) {
       if (win) {
@@ -342,37 +315,7 @@ if (!onlySingleInstance) {
       },
     ]);
 
-    const autoUpdater = activateAutoUpdate({
-      onUpdateAvailable: (info) => {
-        notify({
-          title: "NEW UPDATE IS AVAILABLE",
-          message: `App version ${info.version} ready to be downloaded.`,
-          actions: ["View Release Notes"],
-          callback: (err, response) => {
-            if (!err) {
-              if (response === "view release notes") {
-                shell.openExternal(RELEASE_NOTES_LINK);
-              }
-            }
-          },
-        });
-      },
-      onUpdateDownloaded: (info) => {
-        notify({
-          title: "READY TO BE INSTALLED",
-          message: "Update has been successfully downloaded.",
-          // Temporarily commented out due to an issue with snoretoast https://github.com/mikaelbr/node-notifier/issues/332
-          actions: ["Quit and Install" /*, "Install it Later"*/],
-          callback: (err, response) => {
-            if (!err) {
-              //if (response === "quit and install") {
-              autoUpdater.quitAndInstall();
-              //}
-            }
-          },
-        });
-      },
-    });
+    // Auto-updates removed to avoid any automatic outbound network calls.
   });
 }
 
@@ -463,19 +406,6 @@ ipcMain.on(SET_OPEN_AT_LOGIN, (e, { openAtLogin }) => {
       openAtLogin: openAtLogin,
       openAsHidden: openAtLogin,
     });
-  }
-});
-
-ipcMain.on(SET_ENABLE_RPC, (e, { enableRPC }) => {
-  const enableRPCAtLogin = store.safeGet("openAtLogin");
-
-  if (enableRPCAtLogin !== enableRPC) {
-    store.safeSet("openAtLogin", enableRPC);
-    if (enableRPC) {
-      initializeRPC();
-    } else {
-      uninitializeRPC();
-    }
   }
 });
 

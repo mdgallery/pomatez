@@ -12,7 +12,6 @@ use tauri_plugin_window;
 mod commands;
 mod global_shortcuts;
 mod system_tray;
-mod updater;
 
 #[cfg(target_os = "macos")]
 use crate::commands::try_set_native_titlebar;
@@ -35,11 +34,7 @@ fn main() {
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_notification::init());
 
-
-
-    if config.tauri.bundle.updater.active {
-        app = app.plugin(tauri_plugin_updater::Builder::new().build());
-    }
+    // Updater removed to avoid automatic outbound network calls.
 
     let app = app
         .register_pomatez_commands()

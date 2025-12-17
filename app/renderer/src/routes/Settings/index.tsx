@@ -8,19 +8,13 @@ import HelpSection from "./HelpSection";
 import ShortcutSection from "./ShortcutSection";
 import StickySection from "./StickySection";
 import SettingHeader from "./SettingHeader";
-import { useAppSelector } from "hooks/storeHooks";
-import { Updater } from "../../components";
 
 export default function Settings() {
   const alertState = getFromStorage("alert") || null;
 
-  const update = useAppSelector((state) => state.update);
-
   const [alert, setAlert] = useState(alertState);
 
-  return update.updateBody ? (
-    <Updater />
-  ) : (
+  return (
     <StyledSettings>
       <SettingHeader />
       {alert === null && (

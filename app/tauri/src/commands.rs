@@ -9,7 +9,6 @@ use tauri::{Builder, LogicalSize, Runtime, Wry};
 struct WindowSize;
 
 use crate::system_tray;
-use crate::updater;
 
 impl WindowSize {
     // Not sure why, if its due to UI scaling or what though these values seem to size smaller than the same values on electron
@@ -241,9 +240,7 @@ impl PomatezCommands for Builder<Wry> {
             set_native_titlebar,
             system_tray::tray_icon_update,
             close_window,
-            minimize_window,
-            updater::check_for_updates,
-            updater::install_update
+            minimize_window
         ])
     }
 }

@@ -1,7 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 
 export type SettingTypes = {
-  ignoreUpdate: string;
   alwaysOnTop: boolean;
   compactMode: boolean;
   enableFullscreenBreak: boolean;
@@ -17,7 +16,6 @@ export type SettingTypes = {
   autoStartWorkTime: boolean;
   notificationType: NotificationTypes;
   openAtLogin: boolean;
-  enableRPC: boolean;
 };
 
 export const enum NotificationTypes {

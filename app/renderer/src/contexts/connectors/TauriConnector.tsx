@@ -1,9 +1,8 @@
 import React, { useCallback, useContext, useEffect } from "react";
 import { ConnnectorContext } from "../ConnnectorContext";
-import { useAppDispatch, useAppSelector } from "hooks/storeHooks";
+import { useAppSelector } from "hooks/storeHooks";
 import { CounterContext } from "../CounterContext";
 import {
-  CHECK_FOR_UPDATES,
   SET_ALWAYS_ON_TOP,
   CLOSE_WINDOW,
   SET_COMPACT_MODE,
@@ -13,7 +12,6 @@ import {
   SHOW_WINDOW,
   SET_UI_THEME,
   TRAY_ICON_UPDATE,
-  UPDATE_AVAILABLE,
 } from "@pomatez/shareables";
 import {
   enable,
@@ -21,9 +19,7 @@ import {
   isEnabled,
 } from "@tauri-apps/plugin-autostart";
 import { invoke } from "@tauri-apps/api/primitives";
-import { listen } from "@tauri-apps/api/event";
 import { open } from "@tauri-apps/plugin-shell";
-import { setUpdateBody, setUpdateVersion } from "../../store/update";
 import { useTrayIconUpdates } from "hooks/useTrayIconUpdates";
 
 export const TauriInvokeConnector = {
@@ -35,8 +31,6 @@ export const TauriInvokeConnector = {
 };
 
 export const TauriConnectorProvider: React.FC = ({ children }) => {
-  const dispatch = useAppDispatch();
-
   const settings = useAppSelector((state) => state.settings);
 
   // Prevent webpage behavior (naitive apps shouldn't refresh with F5 or Ctrl+R)
@@ -173,31 +167,6 @@ export const TauriConnectorProvider: React.FC = ({ children }) => {
   useTrayIconUpdates((dataUrl) => {
     send(TRAY_ICON_UPDATE, { dataUrl });
   });
-
-  // Workaround to make sure it only calls once on mount
-  const checkUpdate = useCallback(() => {
-    send(CHECK_FOR_UPDATES, {
-      ignoreVersion: settings.ignoreUpdate || "",
-    });
-  }, [send, settings.ignoreUpdate]);
-
-  useEffect(() => {
-    checkUpdate();
-  }, [checkUpdate]);
-
-  useEffect(() => {
-    const unlisten = listen<{ body: string; version: string }>(
-      UPDATE_AVAILABLE,
-      (updateInfo) => {
-        console.log("Update Info", updateInfo.payload);
-        dispatch(setUpdateVersion(updateInfo?.payload?.version));
-        dispatch(setUpdateBody(updateInfo?.payload?.body));
-      }
-    );
-    return () => {
-      unlisten.then((f) => f());
-    };
-  }, [dispatch]);
 
   return (
     <ConnnectorContext.Provider

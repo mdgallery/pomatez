@@ -6,7 +6,6 @@ import configReducer from "./config";
 import settingReducer from "./settings";
 import timerReducer from "./timer";
 import undoableTasksReducer from "./tasks";
-import updateReducer from "./update";
 
 export type AppStateTypes = ReturnType<typeof store.getState>;
 export type AppDispatchTypes = typeof store.dispatch;
@@ -17,7 +16,6 @@ const store = configureStore({
     settings: settingReducer,
     timer: timerReducer,
     tasks: undoableTasksReducer,
-    update: updateReducer,
   },
 });
 

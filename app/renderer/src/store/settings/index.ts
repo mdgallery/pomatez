@@ -47,10 +47,6 @@ const settingsSlice = createSlice({
   name: "settings",
   initialState,
   reducers: {
-    setIgnoreUpdate(state, action: SettingsPayload<"ignoreUpdate">) {
-      state.ignoreUpdate = action.payload;
-    },
-
     setAlwaysOnTop(state, action: SettingsPayload<"alwaysOnTop">) {
       state.alwaysOnTop = action.payload;
     },
@@ -144,10 +140,6 @@ const settingsSlice = createSlice({
       state.openAtLogin = action.payload;
     },
 
-    setEnableRPC(state, action: SettingsPayload<"enableRPC">) {
-      state.enableRPC = action.payload;
-    },
-
     restoreDefaultSettings() {
       return defaultSettings;
     },
@@ -166,11 +158,9 @@ export const {
   setEnableProgressAnimation,
   setEnableStrictMode,
   setEnableVoiceAssistance,
-  setIgnoreUpdate,
   setMinimizeToTray,
   setNotificationType,
   setOpenAtLogin,
-  setEnableRPC,
   setUseNativeTitlebar,
   toggleNotificationSound,
 } = settingsSlice.actions;
