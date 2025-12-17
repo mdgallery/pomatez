@@ -15,7 +15,7 @@
     "prebuild": "yarn clean && copyfiles -u 3 \"src/assets/logos/*\" ../electron/src/assets",
     "build": "react-scripts build",
     "postbuild": "copyfiles -u 1 \"build/**/*\" ../electron/build",
-    "dev:renderer": "react-scripts start",
+    "dev:renderer": "cross-env PORT=4750 react-scripts start",
     "start": "yarn dev:renderer",
     "gen:tts": "node tts-generator.js"
   },

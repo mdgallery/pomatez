@@ -111,7 +111,7 @@ function createMainWindow() {
 
   win.loadURL(
     !onProduction
-      ? "http://localhost:3000"
+      ? "http://localhost:4750"
       : `file://${path.join(__dirname, "index.html")}`
   );
 
