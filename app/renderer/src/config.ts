@@ -48,7 +48,8 @@ export const routes: (state?: AppStateTypes) => NavItemTypes[] = (
     exact: true,
     path: "/settings",
     component: Settings,
-    notify: !!state?.update?.updateBody,
+    // Updater removed in the hardened build; keep nav badge disabled.
+    notify: false,
   },
 ];
 
