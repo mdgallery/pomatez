@@ -66,6 +66,8 @@
   "resolutions": {
     "@types/react": "^16.9.46",
     "@types/react-dom": "^16.9.19",
-    "react-error-overlay": "6.0.9"
-  }
+    "react-error-overlay": "6.0.9",
+    "typescript": "4.9.4"
+  },
+  "packageManager": "yarn@3.6.4+sha512.e70835d4d6d62c07be76b3c1529cb640c7443f0fe434ef4b6478a5a399218cbaf1511b396b3c56eb03bc86424cff2320f6167ad2fde273aa0df6e60b7754029f"
 }
